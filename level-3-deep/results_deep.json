@@ -1,0 +1,161 @@
+{
+  "attempts_per_task": 5,
+  "dev_tasks": 16,
+  "heldout_tasks": 20,
+  "hygiene": {
+    "agent_segment_banned_string_counts": {
+      "expected_answer": 0,
+      "expected_failure_label": 0,
+      "tasks_dev": 0,
+      "tasks_heldout": 0
+    },
+    "agent_segment_banned_string_total": 0,
+    "agent_segment_heldout_id_total": 0,
+    "all_duplicate_full_texts": 0,
+    "all_exact_checks_zero": true,
+    "all_task_texts": 36,
+    "behavioural_mutation_runs_unchanged": 20,
+    "behavioural_mutation_tasks_checked": 20,
+    "cross_set_duplicates_ignoring_id": 0,
+    "cross_set_pairs_compared": 320,
+    "dev_duplicate_fingerprints": 0,
+    "dev_duplicate_ids": 0,
+    "dev_file_sha256": "ab08f50738a7890b873071a8e4e7dafe6f7e21d2c93e15572c3896a98ccdf30b",
+    "dev_hash_matches_build_record": true,
+    "exact_fingerprint_overlap_count": 0,
+    "exact_plan_overlap_count": 0,
+    "heldout_duplicate_fingerprints": 0,
+    "heldout_duplicate_ids": 0,
+    "heldout_file_sha256": "8b493427a00e893a642bc9318be889af22e690697b6e1ce9bf1a7de2781e0c4f",
+    "heldout_hash_matches_build_record": true,
+    "id_overlap_count": 0,
+    "max_cross_set_jaccard": 0.8,
+    "max_cross_set_pair": [
+      "D16",
+      "H20"
+    ],
+    "near_duplicate_pairs_at_or_above_0_9": 0,
+    "near_neighbour_pairs_at_or_above_0_8": 1,
+    "shared_distinct_expected_answer_values": 2,
+    "shared_expected_answer_values": [
+      "42",
+      "null"
+    ]
+  },
+  "master_seeds": [
+    11,
+    22,
+    33,
+    44,
+    55
+  ],
+  "scenario": "toy agent (not an LLM), failure taxonomy from real runs of the Build eval suite, plus a contamination hygiene report computed in code",
+  "taxonomy": {
+    "failed_attempts": 1285,
+    "failed_by_set": {
+      "dev": 577,
+      "heldout": 708
+    },
+    "failed_by_variant": {
+      "full": 18,
+      "minimal": 532,
+      "no_memory": 113,
+      "no_planner": 503,
+      "no_verifier": 119
+    },
+    "passed_attempts": 3215,
+    "taxonomy_by_set": {
+      "dev": {
+        "excess_steps": 0,
+        "loop_trap": 0,
+        "other_wrong_answer": 0,
+        "silent_wrong_answer": 77,
+        "tool_misuse": 50,
+        "truncated_plan": 450
+      },
+      "heldout": {
+        "excess_steps": 0,
+        "loop_trap": 0,
+        "other_wrong_answer": 0,
+        "silent_wrong_answer": 108,
+        "tool_misuse": 50,
+        "truncated_plan": 550
+      }
+    },
+    "taxonomy_by_variant": {
+      "full": {
+        "excess_steps": 0,
+        "loop_trap": 0,
+        "other_wrong_answer": 0,
+        "silent_wrong_answer": 18,
+        "tool_misuse": 0,
+        "truncated_plan": 0
+      },
+      "minimal": {
+        "excess_steps": 0,
+        "loop_trap": 0,
+        "other_wrong_answer": 0,
+        "silent_wrong_answer": 32,
+        "tool_misuse": 0,
+        "truncated_plan": 500
+      },
+      "no_memory": {
+        "excess_steps": 0,
+        "loop_trap": 0,
+        "other_wrong_answer": 0,
+        "silent_wrong_answer": 13,
+        "tool_misuse": 100,
+        "truncated_plan": 0
+      },
+      "no_planner": {
+        "excess_steps": 0,
+        "loop_trap": 0,
+        "other_wrong_answer": 0,
+        "silent_wrong_answer": 3,
+        "tool_misuse": 0,
+        "truncated_plan": 500
+      },
+      "no_verifier": {
+        "excess_steps": 0,
+        "loop_trap": 0,
+        "other_wrong_answer": 0,
+        "silent_wrong_answer": 119,
+        "tool_misuse": 0,
+        "truncated_plan": 0
+      }
+    },
+    "taxonomy_counts": {
+      "excess_steps": 0,
+      "loop_trap": 0,
+      "other_wrong_answer": 0,
+      "silent_wrong_answer": 185,
+      "tool_misuse": 100,
+      "truncated_plan": 1000
+    },
+    "taxonomy_sum": 1285,
+    "taxonomy_sum_matches_failures": true,
+    "total_attempts": 4500,
+    "total_by_variant": {
+      "full": 900,
+      "minimal": 900,
+      "no_memory": 900,
+      "no_planner": 900,
+      "no_verifier": 900
+    }
+  },
+  "taxonomy_precedence": [
+    "loop_trap",
+    "excess_steps",
+    "truncated_plan",
+    "tool_misuse",
+    "silent_wrong_answer",
+    "other_wrong_answer"
+  ],
+  "variants": [
+    "full",
+    "no_planner",
+    "no_memory",
+    "no_verifier",
+    "minimal"
+  ]
+}
