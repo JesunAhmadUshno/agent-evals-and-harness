@@ -7,8 +7,16 @@ import unittest
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "level-1-learn"))
 from agent_eval import (  # noqa: E402
-    EvalError, TOOL_COSTS, ToyAgent, evaluate, tool_add, tool_divide,
-    tool_lookup, tool_multiply, ToolFailure, validate_tasks,
+    TOOL_COSTS,
+    EvalError,
+    ToolFailure,
+    ToyAgent,
+    evaluate,
+    tool_add,
+    tool_divide,
+    tool_lookup,
+    tool_multiply,
+    validate_tasks,
 )
 
 

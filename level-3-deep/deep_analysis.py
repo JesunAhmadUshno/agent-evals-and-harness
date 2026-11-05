@@ -29,8 +29,12 @@ BUILD = os.path.join(os.path.dirname(HERE), "level-2-build")
 sys.path.insert(0, BUILD)
 
 from eval_suite import (  # noqa: E402
-    ATTEMPTS_PER_TASK, MASTER_SEEDS, VARIANTS, ConfigurableToyAgent,
-    score_attempt, validate_tasks,
+    ATTEMPTS_PER_TASK,
+    MASTER_SEEDS,
+    VARIANTS,
+    ConfigurableToyAgent,
+    score_attempt,
+    validate_tasks,
 )
 
 TAXONOMY_CLASSES = (
