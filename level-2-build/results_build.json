@@ -1,0 +1,412 @@
+{
+  "ablation_table": [
+    {
+      "components": {
+        "memory": true,
+        "planner": true,
+        "verifier": true
+      },
+      "mean_cost_units": 2.8933,
+      "mean_steps": 1.8911,
+      "mean_success": 0.98,
+      "pass_at_1": 0.9889,
+      "pass_at_3": 1.0,
+      "pass_at_5": 1.0,
+      "std": 0.0075,
+      "variance": 0.0001,
+      "variant": "full"
+    },
+    {
+      "components": {
+        "memory": true,
+        "planner": false,
+        "verifier": true
+      },
+      "mean_cost_units": 1.5511,
+      "mean_steps": 1.1367,
+      "mean_success": 0.4411,
+      "pass_at_1": 0.4389,
+      "pass_at_3": 0.4444,
+      "pass_at_5": 0.4444,
+      "std": 0.0044,
+      "variance": 0.0,
+      "variant": "no_planner"
+    },
+    {
+      "components": {
+        "memory": false,
+        "planner": true,
+        "verifier": true
+      },
+      "mean_cost_units": 2.8733,
+      "mean_steps": 1.8533,
+      "mean_success": 0.8744,
+      "pass_at_1": 0.8667,
+      "pass_at_3": 0.8889,
+      "pass_at_5": 0.8889,
+      "std": 0.009,
+      "variance": 0.0001,
+      "variant": "no_memory"
+    },
+    {
+      "components": {
+        "memory": true,
+        "planner": true,
+        "verifier": false
+      },
+      "mean_cost_units": 2.6667,
+      "mean_steps": 1.7778,
+      "mean_success": 0.8678,
+      "pass_at_1": 0.85,
+      "pass_at_3": 0.9889,
+      "pass_at_5": 0.9944,
+      "std": 0.0203,
+      "variance": 0.0004,
+      "variant": "no_verifier"
+    },
+    {
+      "components": {
+        "memory": false,
+        "planner": false,
+        "verifier": false
+      },
+      "mean_cost_units": 1.2778,
+      "mean_steps": 1.0,
+      "mean_success": 0.4089,
+      "pass_at_1": 0.4111,
+      "pass_at_3": 0.4444,
+      "pass_at_5": 0.4444,
+      "std": 0.009,
+      "variance": 0.0001,
+      "variant": "minimal"
+    }
+  ],
+  "attempts_per_task": 5,
+  "dev_file_sha256": "ab08f50738a7890b873071a8e4e7dafe6f7e21d2c93e15572c3896a98ccdf30b",
+  "dev_tasks": 16,
+  "heldout_file_sha256": "8b493427a00e893a642bc9318be889af22e690697b6e1ce9bf1a7de2781e0c4f",
+  "heldout_tasks": 20,
+  "master_seeds": [
+    11,
+    22,
+    33,
+    44,
+    55
+  ],
+  "mean_success_definition": "mean over master seeds of the per-seed attempt success rate (passed attempts over all attempts)",
+  "pass_k_definition": "a task passes at k if any of its first k attempts passes; pass@k is the mean over master seeds of the per-seed fraction of tasks passing at k",
+  "scenario": "configurable toy agent (not an LLM), component ablations (not model ablations), dev set plus held-out set reported separately",
+  "variance_definition": "population variance over master seeds of the per-seed attempt success rate",
+  "variants": {
+    "full": {
+      "all": {
+        "mean_attempt_success_rate": 0.98,
+        "mean_cost_units": 2.8933,
+        "mean_steps": 1.8911,
+        "pass_at_k": {
+          "1": 0.9889,
+          "3": 1.0,
+          "5": 1.0
+        },
+        "per_seed_success_rates": [
+          0.9833,
+          0.9667,
+          0.9889,
+          0.9833,
+          0.9778
+        ],
+        "std_attempt_success_rate": 0.0075,
+        "tasks": 36,
+        "variance_attempt_success_rate": 0.0001
+      },
+      "dev": {
+        "mean_attempt_success_rate": 0.9775,
+        "mean_cost_units": 2.98,
+        "mean_steps": 1.9275,
+        "pass_at_k": {
+          "1": 1.0,
+          "3": 1.0,
+          "5": 1.0
+        },
+        "per_seed_success_rates": [
+          0.975,
+          0.9625,
+          0.975,
+          0.9875,
+          0.9875
+        ],
+        "std_attempt_success_rate": 0.0094,
+        "tasks": 16,
+        "variance_attempt_success_rate": 0.0001
+      },
+      "heldout": {
+        "mean_attempt_success_rate": 0.982,
+        "mean_cost_units": 2.824,
+        "mean_steps": 1.862,
+        "pass_at_k": {
+          "1": 0.98,
+          "3": 1.0,
+          "5": 1.0
+        },
+        "per_seed_success_rates": [
+          0.99,
+          0.97,
+          1.0,
+          0.98,
+          0.97
+        ],
+        "std_attempt_success_rate": 0.0117,
+        "tasks": 20,
+        "variance_attempt_success_rate": 0.0001
+      }
+    },
+    "minimal": {
+      "all": {
+        "mean_attempt_success_rate": 0.4089,
+        "mean_cost_units": 1.2778,
+        "mean_steps": 1.0,
+        "pass_at_k": {
+          "1": 0.4111,
+          "3": 0.4444,
+          "5": 0.4444
+        },
+        "per_seed_success_rates": [
+          0.4111,
+          0.3944,
+          0.4111,
+          0.4056,
+          0.4222
+        ],
+        "std_attempt_success_rate": 0.009,
+        "tasks": 36,
+        "variance_attempt_success_rate": 0.0001
+      },
+      "dev": {
+        "mean_attempt_success_rate": 0.405,
+        "mean_cost_units": 1.3125,
+        "mean_steps": 1.0,
+        "pass_at_k": {
+          "1": 0.3875,
+          "3": 0.4375,
+          "5": 0.4375
+        },
+        "per_seed_success_rates": [
+          0.375,
+          0.3875,
+          0.4,
+          0.4375,
+          0.425
+        ],
+        "std_attempt_success_rate": 0.0232,
+        "tasks": 16,
+        "variance_attempt_success_rate": 0.0005
+      },
+      "heldout": {
+        "mean_attempt_success_rate": 0.412,
+        "mean_cost_units": 1.25,
+        "mean_steps": 1.0,
+        "pass_at_k": {
+          "1": 0.43,
+          "3": 0.45,
+          "5": 0.45
+        },
+        "per_seed_success_rates": [
+          0.44,
+          0.4,
+          0.42,
+          0.38,
+          0.42
+        ],
+        "std_attempt_success_rate": 0.0204,
+        "tasks": 20,
+        "variance_attempt_success_rate": 0.0004
+      }
+    },
+    "no_memory": {
+      "all": {
+        "mean_attempt_success_rate": 0.8744,
+        "mean_cost_units": 2.8733,
+        "mean_steps": 1.8533,
+        "pass_at_k": {
+          "1": 0.8667,
+          "3": 0.8889,
+          "5": 0.8889
+        },
+        "per_seed_success_rates": [
+          0.8611,
+          0.8833,
+          0.8833,
+          0.8778,
+          0.8667
+        ],
+        "std_attempt_success_rate": 0.009,
+        "tasks": 36,
+        "variance_attempt_success_rate": 0.0001
+      },
+      "dev": {
+        "mean_attempt_success_rate": 0.87,
+        "mean_cost_units": 2.9425,
+        "mean_steps": 1.8775,
+        "pass_at_k": {
+          "1": 0.875,
+          "3": 0.875,
+          "5": 0.875
+        },
+        "per_seed_success_rates": [
+          0.8625,
+          0.875,
+          0.875,
+          0.875,
+          0.8625
+        ],
+        "std_attempt_success_rate": 0.0061,
+        "tasks": 16,
+        "variance_attempt_success_rate": 0.0
+      },
+      "heldout": {
+        "mean_attempt_success_rate": 0.878,
+        "mean_cost_units": 2.818,
+        "mean_steps": 1.834,
+        "pass_at_k": {
+          "1": 0.86,
+          "3": 0.9,
+          "5": 0.9
+        },
+        "per_seed_success_rates": [
+          0.86,
+          0.89,
+          0.89,
+          0.88,
+          0.87
+        ],
+        "std_attempt_success_rate": 0.0117,
+        "tasks": 20,
+        "variance_attempt_success_rate": 0.0001
+      }
+    },
+    "no_planner": {
+      "all": {
+        "mean_attempt_success_rate": 0.4411,
+        "mean_cost_units": 1.5511,
+        "mean_steps": 1.1367,
+        "pass_at_k": {
+          "1": 0.4389,
+          "3": 0.4444,
+          "5": 0.4444
+        },
+        "per_seed_success_rates": [
+          0.4444,
+          0.4333,
+          0.4389,
+          0.4444,
+          0.4444
+        ],
+        "std_attempt_success_rate": 0.0044,
+        "tasks": 36,
+        "variance_attempt_success_rate": 0.0
+      },
+      "dev": {
+        "mean_attempt_success_rate": 0.4375,
+        "mean_cost_units": 1.5975,
+        "mean_steps": 1.1425,
+        "pass_at_k": {
+          "1": 0.4375,
+          "3": 0.4375,
+          "5": 0.4375
+        },
+        "per_seed_success_rates": [
+          0.4375,
+          0.4375,
+          0.4375,
+          0.4375,
+          0.4375
+        ],
+        "std_attempt_success_rate": 0.0,
+        "tasks": 16,
+        "variance_attempt_success_rate": 0.0
+      },
+      "heldout": {
+        "mean_attempt_success_rate": 0.444,
+        "mean_cost_units": 1.514,
+        "mean_steps": 1.132,
+        "pass_at_k": {
+          "1": 0.44,
+          "3": 0.45,
+          "5": 0.45
+        },
+        "per_seed_success_rates": [
+          0.45,
+          0.43,
+          0.44,
+          0.45,
+          0.45
+        ],
+        "std_attempt_success_rate": 0.008,
+        "tasks": 20,
+        "variance_attempt_success_rate": 0.0001
+      }
+    },
+    "no_verifier": {
+      "all": {
+        "mean_attempt_success_rate": 0.8678,
+        "mean_cost_units": 2.6667,
+        "mean_steps": 1.7778,
+        "pass_at_k": {
+          "1": 0.85,
+          "3": 0.9889,
+          "5": 0.9944
+        },
+        "per_seed_success_rates": [
+          0.8722,
+          0.8833,
+          0.8778,
+          0.8278,
+          0.8778
+        ],
+        "std_attempt_success_rate": 0.0203,
+        "tasks": 36,
+        "variance_attempt_success_rate": 0.0004
+      },
+      "dev": {
+        "mean_attempt_success_rate": 0.8675,
+        "mean_cost_units": 2.75,
+        "mean_steps": 1.8125,
+        "pass_at_k": {
+          "1": 0.8375,
+          "3": 1.0,
+          "5": 1.0
+        },
+        "per_seed_success_rates": [
+          0.8125,
+          0.875,
+          0.9,
+          0.8375,
+          0.9125
+        ],
+        "std_attempt_success_rate": 0.0376,
+        "tasks": 16,
+        "variance_attempt_success_rate": 0.0014
+      },
+      "heldout": {
+        "mean_attempt_success_rate": 0.868,
+        "mean_cost_units": 2.6,
+        "mean_steps": 1.75,
+        "pass_at_k": {
+          "1": 0.86,
+          "3": 0.98,
+          "5": 0.99
+        },
+        "per_seed_success_rates": [
+          0.92,
+          0.89,
+          0.86,
+          0.82,
+          0.85
+        ],
+        "std_attempt_success_rate": 0.0343,
+        "tasks": 20,
+        "variance_attempt_success_rate": 0.0012
+      }
+    }
+  }
+}
