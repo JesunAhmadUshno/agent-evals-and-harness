@@ -339,7 +339,6 @@ def run_harness(dev_tasks, heldout_tasks):
     all_tasks = list(dev_tasks) + list(heldout_tasks)
     variants = {}
     for name in VARIANTS:
-        per_seed = []
         split = {}
         for label, subset in (("dev", dev_tasks), ("heldout", heldout_tasks),
                               ("all", all_tasks)):

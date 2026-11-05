@@ -10,8 +10,15 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BUILD = os.path.join(ROOT, "level-2-build")
 sys.path.insert(0, BUILD)
 from eval_suite import (  # noqa: E402
-    VARIANTS, ConfigurableToyAgent, EvalError, mean_and_variance,
-    pass_at_k, run_harness, run_suite, score_attempt, slip_rate,
+    VARIANTS,
+    ConfigurableToyAgent,
+    EvalError,
+    mean_and_variance,
+    pass_at_k,
+    run_harness,
+    run_suite,
+    score_attempt,
+    slip_rate,
     validate_tasks,
 )
 

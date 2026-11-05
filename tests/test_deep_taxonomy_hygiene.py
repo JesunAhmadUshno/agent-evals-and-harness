@@ -16,8 +16,12 @@ sys.path.insert(0, DEEP)
 sys.path.insert(0, BUILD)
 
 from deep_analysis import (  # noqa: E402
-    TAXONOMY_CLASSES, agent_class_segment, classify_failure,
-    full_report, hygiene_report, run_all_attempts,
+    TAXONOMY_CLASSES,
+    agent_class_segment,
+    classify_failure,
+    full_report,
+    hygiene_report,
+    run_all_attempts,
 )
 
 
