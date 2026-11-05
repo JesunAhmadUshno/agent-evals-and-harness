@@ -66,6 +66,21 @@ Hygiene: 320 cross-set pairs compared, 0 exact fingerprint overlaps, 0 exact pla
 
 Deep unit tests: 19 new tests passing (64 unit tests total with Learn and Build), plus the scaffold smoke test.
 
+## Fan-out
+
+Written fan-out set for v1.0 (2026-11-05), in fanout/. Every
+piece states plainly that the agent is a toy deterministic agent,
+not an LLM, and that held-out means unseen during development in
+this repo, not an external benchmark. Channel outcomes and
+per-piece publicity grades are logged in PUBLICITY.md.
+
+- Blog post: fanout/blog-post.md
+- Tutorial: fanout/tutorial.md
+- Website page copy: fanout/website-page.md
+- LinkedIn post draft (DRAFT NOT POSTED): fanout/linkedin-post.md
+- Paper candidate brief: fanout/paper-candidate.md
+- Release notes (v0.1, v0.5, v1.0): fanout/release-notes.md
+
 ## Novelty
 
 PROPOSED. See NOVELTY.md. The novelty text is a draft until the Jev claim_check gate passes on it.
