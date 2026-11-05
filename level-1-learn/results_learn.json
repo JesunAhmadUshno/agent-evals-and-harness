@@ -1,0 +1,447 @@
+{
+  "scenario": "fixed 12-task set, deterministic toy agent (not an LLM)",
+  "summary": {
+    "failed": 3,
+    "match_rate": 1.0,
+    "matches_expected": 12,
+    "mean_cost_units": 2.25,
+    "mean_steps": 1.5,
+    "per_category": {
+      "arithmetic": {
+        "matches_expected": 3,
+        "mean_cost_units": 2.6667,
+        "mean_steps": 1.3333,
+        "succeeded": 3,
+        "success_rate": 1.0,
+        "tasks": 3,
+        "total_cost_units": 8,
+        "total_steps": 4
+      },
+      "designed-failure": {
+        "matches_expected": 3,
+        "mean_cost_units": 2.0,
+        "mean_steps": 1.3333,
+        "succeeded": 0,
+        "success_rate": 0.0,
+        "tasks": 3,
+        "total_cost_units": 6,
+        "total_steps": 4
+      },
+      "lookup": {
+        "matches_expected": 3,
+        "mean_cost_units": 1.0,
+        "mean_steps": 1.0,
+        "succeeded": 3,
+        "success_rate": 1.0,
+        "tasks": 3,
+        "total_cost_units": 3,
+        "total_steps": 3
+      },
+      "multi-step": {
+        "matches_expected": 3,
+        "mean_cost_units": 3.3333,
+        "mean_steps": 2.3333,
+        "succeeded": 3,
+        "success_rate": 1.0,
+        "tasks": 3,
+        "total_cost_units": 10,
+        "total_steps": 7
+      }
+    },
+    "succeeded": 9,
+    "success_rate": 0.75,
+    "total_cost_units": 27,
+    "total_steps": 18,
+    "total_tasks": 12,
+    "trajectory_entries": 18
+  },
+  "tasks": [
+    {
+      "agent_answer": 42,
+      "agent_outcome": "success",
+      "category": "arithmetic",
+      "cost_units": 2,
+      "expected_answer": 42,
+      "expected_failure_label": null,
+      "expected_outcome": "success",
+      "failure_label": null,
+      "matches_expected": true,
+      "steps": 1,
+      "task_id": "A01",
+      "trajectory": [
+        {
+          "args": [
+            17,
+            25
+          ],
+          "cost_units": 2,
+          "error": null,
+          "failure_label": null,
+          "result": 42,
+          "step": 1,
+          "tool": "add"
+        }
+      ]
+    },
+    {
+      "agent_answer": 42,
+      "agent_outcome": "success",
+      "category": "arithmetic",
+      "cost_units": 2,
+      "expected_answer": 42,
+      "expected_failure_label": null,
+      "expected_outcome": "success",
+      "failure_label": null,
+      "matches_expected": true,
+      "steps": 1,
+      "task_id": "A02",
+      "trajectory": [
+        {
+          "args": [
+            6,
+            7
+          ],
+          "cost_units": 2,
+          "error": null,
+          "failure_label": null,
+          "result": 42,
+          "step": 1,
+          "tool": "multiply"
+        }
+      ]
+    },
+    {
+      "agent_answer": 35,
+      "agent_outcome": "success",
+      "category": "arithmetic",
+      "cost_units": 4,
+      "expected_answer": 35,
+      "expected_failure_label": null,
+      "expected_outcome": "success",
+      "failure_label": null,
+      "matches_expected": true,
+      "steps": 2,
+      "task_id": "A03",
+      "trajectory": [
+        {
+          "args": [
+            3,
+            4
+          ],
+          "cost_units": 2,
+          "error": null,
+          "failure_label": null,
+          "result": 7,
+          "step": 1,
+          "tool": "add"
+        },
+        {
+          "args": [
+            7,
+            5
+          ],
+          "cost_units": 2,
+          "error": null,
+          "failure_label": null,
+          "result": 35,
+          "step": 2,
+          "tool": "multiply"
+        }
+      ]
+    },
+    {
+      "agent_answer": "Ottawa",
+      "agent_outcome": "success",
+      "category": "lookup",
+      "cost_units": 1,
+      "expected_answer": "Ottawa",
+      "expected_failure_label": null,
+      "expected_outcome": "success",
+      "failure_label": null,
+      "matches_expected": true,
+      "steps": 1,
+      "task_id": "L01",
+      "trajectory": [
+        {
+          "args": [
+            "capital_canada"
+          ],
+          "cost_units": 1,
+          "error": null,
+          "failure_label": null,
+          "result": "Ottawa",
+          "step": 1,
+          "tool": "lookup"
+        }
+      ]
+    },
+    {
+      "agent_answer": "Paris",
+      "agent_outcome": "success",
+      "category": "lookup",
+      "cost_units": 1,
+      "expected_answer": "Paris",
+      "expected_failure_label": null,
+      "expected_outcome": "success",
+      "failure_label": null,
+      "matches_expected": true,
+      "steps": 1,
+      "task_id": "L02",
+      "trajectory": [
+        {
+          "args": [
+            "capital_france"
+          ],
+          "cost_units": 1,
+          "error": null,
+          "failure_label": null,
+          "result": "Paris",
+          "step": 1,
+          "tool": "lookup"
+        }
+      ]
+    },
+    {
+      "agent_answer": 100,
+      "agent_outcome": "success",
+      "category": "lookup",
+      "cost_units": 1,
+      "expected_answer": 100,
+      "expected_failure_label": null,
+      "expected_outcome": "success",
+      "failure_label": null,
+      "matches_expected": true,
+      "steps": 1,
+      "task_id": "L03",
+      "trajectory": [
+        {
+          "args": [
+            "boiling_point_water_c"
+          ],
+          "cost_units": 1,
+          "error": null,
+          "failure_label": null,
+          "result": 100,
+          "step": 1,
+          "tool": "lookup"
+        }
+      ]
+    },
+    {
+      "agent_answer": 12,
+      "agent_outcome": "success",
+      "category": "multi-step",
+      "cost_units": 3,
+      "expected_answer": 12,
+      "expected_failure_label": null,
+      "expected_outcome": "success",
+      "failure_label": null,
+      "matches_expected": true,
+      "steps": 2,
+      "task_id": "M01",
+      "trajectory": [
+        {
+          "args": [
+            "unit_price_apple"
+          ],
+          "cost_units": 1,
+          "error": null,
+          "failure_label": null,
+          "result": 3,
+          "step": 1,
+          "tool": "lookup"
+        },
+        {
+          "args": [
+            3,
+            4
+          ],
+          "cost_units": 2,
+          "error": null,
+          "failure_label": null,
+          "result": 12,
+          "step": 2,
+          "tool": "multiply"
+        }
+      ]
+    },
+    {
+      "agent_answer": 25,
+      "agent_outcome": "success",
+      "category": "multi-step",
+      "cost_units": 4,
+      "expected_answer": 25,
+      "expected_failure_label": null,
+      "expected_outcome": "success",
+      "failure_label": null,
+      "matches_expected": true,
+      "steps": 3,
+      "task_id": "M02",
+      "trajectory": [
+        {
+          "args": [
+            "score_alice"
+          ],
+          "cost_units": 1,
+          "error": null,
+          "failure_label": null,
+          "result": 10,
+          "step": 1,
+          "tool": "lookup"
+        },
+        {
+          "args": [
+            "score_bob"
+          ],
+          "cost_units": 1,
+          "error": null,
+          "failure_label": null,
+          "result": 15,
+          "step": 2,
+          "tool": "lookup"
+        },
+        {
+          "args": [
+            10,
+            15
+          ],
+          "cost_units": 2,
+          "error": null,
+          "failure_label": null,
+          "result": 25,
+          "step": 3,
+          "tool": "add"
+        }
+      ]
+    },
+    {
+      "agent_answer": 25,
+      "agent_outcome": "success",
+      "category": "multi-step",
+      "cost_units": 3,
+      "expected_answer": 25,
+      "expected_failure_label": null,
+      "expected_outcome": "success",
+      "failure_label": null,
+      "matches_expected": true,
+      "steps": 2,
+      "task_id": "M03",
+      "trajectory": [
+        {
+          "args": [
+            "side_length_square"
+          ],
+          "cost_units": 1,
+          "error": null,
+          "failure_label": null,
+          "result": 5,
+          "step": 1,
+          "tool": "lookup"
+        },
+        {
+          "args": [
+            5,
+            5
+          ],
+          "cost_units": 2,
+          "error": null,
+          "failure_label": null,
+          "result": 25,
+          "step": 2,
+          "tool": "multiply"
+        }
+      ]
+    },
+    {
+      "agent_answer": null,
+      "agent_outcome": "failure",
+      "category": "designed-failure",
+      "cost_units": 1,
+      "expected_answer": null,
+      "expected_failure_label": "missing_knowledge",
+      "expected_outcome": "failure",
+      "failure_label": "missing_knowledge",
+      "matches_expected": true,
+      "steps": 1,
+      "task_id": "F01",
+      "trajectory": [
+        {
+          "args": [
+            "capital_atlantis"
+          ],
+          "cost_units": 1,
+          "error": "lookup miss: no entry for 'capital_atlantis'",
+          "failure_label": "missing_knowledge",
+          "result": null,
+          "step": 1,
+          "tool": "lookup"
+        }
+      ]
+    },
+    {
+      "agent_answer": null,
+      "agent_outcome": "failure",
+      "category": "designed-failure",
+      "cost_units": 2,
+      "expected_answer": null,
+      "expected_failure_label": "division_by_zero",
+      "expected_outcome": "failure",
+      "failure_label": "division_by_zero",
+      "matches_expected": true,
+      "steps": 1,
+      "task_id": "F02",
+      "trajectory": [
+        {
+          "args": [
+            10,
+            0
+          ],
+          "cost_units": 2,
+          "error": "division by zero: 10 / 0",
+          "failure_label": "division_by_zero",
+          "result": null,
+          "step": 1,
+          "tool": "divide"
+        }
+      ]
+    },
+    {
+      "agent_answer": null,
+      "agent_outcome": "failure",
+      "category": "designed-failure",
+      "cost_units": 3,
+      "expected_answer": null,
+      "expected_failure_label": "division_by_zero",
+      "expected_outcome": "failure",
+      "failure_label": "division_by_zero",
+      "matches_expected": true,
+      "steps": 2,
+      "task_id": "F03",
+      "trajectory": [
+        {
+          "args": [
+            "inventory_count"
+          ],
+          "cost_units": 1,
+          "error": null,
+          "failure_label": null,
+          "result": 0,
+          "step": 1,
+          "tool": "lookup"
+        },
+        {
+          "args": [
+            100,
+            0
+          ],
+          "cost_units": 2,
+          "error": "division by zero: 100 / 0",
+          "failure_label": "division_by_zero",
+          "result": null,
+          "step": 2,
+          "tool": "divide"
+        }
+      ]
+    }
+  ]
+}
