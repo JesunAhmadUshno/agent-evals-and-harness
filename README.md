@@ -2,7 +2,7 @@
 
 Agent evaluation as its own project: trajectory evals, a private held-out task set, harness against model ablation, contamination hygiene.
 
-Status: Learn DONE (2026-11-05). Build DONE (2026-11-05). Deep not started.
+Status: Learn DONE (2026-11-05). Build DONE (2026-11-05). Deep DONE, compressed (2026-11-05). Release v1.0. The rest of the v2 Deep scope is the v1.1 backlog in ROADMAP.md.
 Project: P27. Fleet node: BlackBoxV2. Wave: Wave 6 (Learn pulled early, Sprint 3 pull, 2026-11-05).
 
 ## Start here
@@ -16,7 +16,7 @@ Project: P27. Fleet node: BlackBoxV2. Wave: Wave 6 (Learn pulled early, Sprint 3
 
 - Level 1, Learn: DONE (2026-11-05). Score one deterministic toy agent (not an LLM) on a fixed 12-task set: success rate, steps, cost per task, with trajectory logs. See level-1-learn/README.md.
 - Level 2, Build: DONE (2026-11-05). An eval suite with a 16-task dev set and a 20-task held-out set (reported separately), pass@k and variance over 5 seeded master seeds, and a harness over five toy component ablation variants (planner, memory, verifier). These are toy component ablations, not model ablations. See level-2-build/README.md.
-- Level 3, Deep: benchmarks, optimization, evaluation, hard cases. Not started.
+- Level 3, Deep: DONE, compressed (2026-11-05). A failure taxonomy with counts from real runs of the Build suite (4,500 attempts, 1,285 failures, six primary classes summing to the failure total) and a contamination hygiene report computed in code (0 exact overlaps, 0 duplicates, 0 held-out answers in the toy agent code, one near neighbour pair disclosed). The agent is a toy agent, not an LLM. See level-3-deep/README.md.
 
 ## Benchmarks
 
@@ -49,6 +49,22 @@ Build, measured 2026-11-05, Muse VM, Python 3.12, stdlib only. Method: level-2-b
 | held-out | 20 | 0.982 |
 
 Build unit tests: 24 new tests passing (45 unit tests total with Learn).
+
+Deep, measured 2026-11-05, Muse VM, Python 3.12, stdlib only. Method: level-3-deep/run_deep.py imports the Build suite and re-runs it attempt by attempt (five toy agent variants, 5 master seeds, 36 tasks, 5 attempts per task), classifies every failed attempt into one primary class, computes the hygiene report in code, and writes level-3-deep/results_deep.json.
+
+| Primary class | Count | Share of failures |
+| --- | --- | --- |
+| truncated_plan | 1,000 | 77.82 percent |
+| silent_wrong_answer | 185 | 14.40 percent |
+| tool_misuse | 100 | 7.78 percent |
+| loop_trap | 0 | 0.00 percent |
+| excess_steps | 0 | 0.00 percent |
+| other_wrong_answer | 0 | 0.00 percent |
+| total failures | 1,285 of 4,500 attempts | 100.00 percent |
+
+Hygiene: 320 cross-set pairs compared, 0 exact fingerprint overlaps, 0 exact plan overlaps, 0 near duplicates at or above Jaccard 0.9, 1 near neighbour pair at 0.8 (D16 and H20, disclosed), 0 duplicates in 36 task texts, toy agent class segment contains 0 held-out answers or scoring fields, behavioural mutation check 20 of 20 runs unchanged, held-out and dev file hashes match the Build record.
+
+Deep unit tests: 19 new tests passing (64 unit tests total with Learn and Build), plus the scaffold smoke test.
 
 ## Novelty
 
