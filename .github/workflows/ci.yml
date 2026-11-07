@@ -34,3 +34,11 @@ jobs:
         run: python -m unittest discover -s tests -p "test_deep*.py" -v
       - name: level 3 deep run
         run: python level-3-deep/run_deep.py
+      - name: hygiene threshold sweep tests
+        run: python -m unittest discover -s tests -p "test_deep_hygiene*.py" -v
+      - name: hygiene threshold sweep run
+        run: python level-3-deep/hygiene_sensitivity.py
+      - name: committed results match a fresh run
+        run: git diff --exit-code -- level-1-learn/results_learn.json level-2-build/results_build.json level-3-deep/results_deep.json level-3-deep/results_hygiene_sensitivity.json
+      - name: JavaScript replay reproduces the recorded results
+        run: node site/src/engine.check.mjs
