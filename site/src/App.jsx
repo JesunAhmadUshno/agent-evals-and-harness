@@ -4,6 +4,7 @@ import build from '../../level-2-build/results_build.json';
 import devTasks from '../../level-2-build/tasks_dev.json';
 import heldTasks from '../../level-2-build/tasks_heldout.json';
 import deep from '../../level-3-deep/results_deep.json';
+import sens from '../../level-3-deep/results_hygiene_sensitivity.json';
 import learn from '../../level-1-learn/results_learn.json';
 import learnMd from '../../level-1-learn/README.md?raw';
 import buildMd from '../../level-2-build/README.md?raw';
@@ -11,7 +12,7 @@ import deepMd from '../../level-3-deep/README.md?raw';
 import roadmapMd from '../../ROADMAP.md?raw';
 import {
   parseSuite, runVariant, runAgent, summarize, taxonomy, draws, seedString, scoreAttempt, classifyFailure,
-  unbiasedFromSeedRows, bootstrapTasks, BOOT_B, OFF_RECORD, TAXONOMY, fingerprintTokens, jaccard, handChecks,
+  unbiasedFromSeedRows, bootstrapTasks, pairedBootstrapDiff, BOOT_B, OFF_RECORD, TAXONOMY, fingerprintTokens, jaccard, handChecks,
 } from './engine.js';
 import { parseGrade, parseSha, parseBacklog } from './docs.js';
 
@@ -411,6 +412,7 @@ function PassK() {
   const unb = m.reduce((s, row) => s + unbiasedFromSeedRows([{ matrix: [row] }], k), 0) / m.length;
   const W = 960, cw = Math.min(40, (W - 70) / ids.length), H = n * cw + 46;
   const ci = useMemo(() => bootstrapTasks(S.seedRows), [S]);
+  const pd = useMemo(() => (name === 'full' ? null : pairedBootstrapDiff(summarize(SUITE, BASE.full, IDS[split]).seedRows, S.seedRows)), [name, split, S]);
   const ks = Array.from({ length: n }, (_, i) => i + 1);
   return (
     <section id="passk" className="card window reveal" data-title="pass_at_k.calc — live">
@@ -467,6 +469,7 @@ function PassK() {
       <p className="hint">
         Bootstrap over tasks (added, {fmt(BOOT_B)} resamples, fixed seed): mean attempt success {ci.point.toFixed(4)}, 95% interval {ci.lo.toFixed(4)} to {ci.hi.toFixed(4)}.
         The repo reports only the variance across {SUITE.masterSeeds.length} seeds, which ignores task-to-task spread; with {ids.length} tasks, one task moves pass@k by {(1 / ids.length).toFixed(4)}.
+        {pd && <> Paired bootstrap over the same tasks (added): full minus {name} = {pd.point.toFixed(4)}, 95% interval {pd.lo.toFixed(4)} to {pd.hi.toFixed(4)}, from {pd.tasksDiffering} of {ids.length} tasks that differ.</>}
       </p>
     </section>
   );
@@ -620,18 +623,46 @@ function Hygiene() {
           </tbody>
         </table>
       </div>
+      <SensChart />
       <p className="hint">Fingerprint tokens (category, outcome, answer, label, tools, args) recomputed live: {inter} shared of {uni} total, Jaccard = {inter}/{uni} = {jaccard(ta, tb)}, equal to the recorded {h.max_cross_set_jaccard}. Difficulty is not part of the fingerprint.</p>
     </section>
   );
 }
 
 const ZERO_CLASSES = TAXONOMY.filter((k) => deep.taxonomy.taxonomy_counts[k] === 0 && k !== 'other_wrong_answer').length;
+function SensChart() {
+  const ts = sens.thresholds, c = ts.map((t) => sens.pairs_at_or_above[t.toFixed(2)]), max = Math.max(...c);
+  const W = 960, H = 220, pad = { l: 40, r: 10, t: 16, b: 34 }, bw = (W - pad.l - pad.r) / ts.length;
+  const y = (v) => pad.t + (1 - v / max) * (H - pad.t - pad.b);
+  return (
+    <>
+      <h3 style={{ marginTop: 20 }}>Threshold sweep: flagged pairs out of {sens.pairs_compared} (added in this change)</h3>
+      <p className="hint" style={{ marginTop: 4 }}>From <a href={blob('level-3-deep/results_hygiene_sensitivity.json')}>results_hygiene_sensitivity.json</a>, written by hygiene_sensitivity.py with the same tokens and Jaccard. The report’s cut-offs are marked; the count is zero from {ts.find((t, i) => c[i] === 0).toFixed(2)} upward.</p>
+      <div className="wide" style={{ overflowX: 'auto' }}>
+        <svg className="chart" style={{ minWidth: 620 }} viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Number of cross-set pairs at or above each Jaccard threshold">
+          <line className="axis" x1={pad.l} x2={W - pad.r} y1={y(0)} y2={y(0)} />
+          {ts.map((t, i) => {
+            const mark = t.toFixed(2) === '0.80' || t.toFixed(2) === '0.90';
+            return (
+              <g key={t} transform={`translate(${pad.l + i * bw} 0)`}>
+                <rect x={4} y={y(c[i])} width={bw - 8} height={y(0) - y(c[i])} rx={4} fill={mark ? 'var(--warn)' : 'var(--primary)'} opacity={mark ? 1 : 0.7} />
+                <text x={bw / 2} y={y(c[i]) - 5} textAnchor="middle" style={{ fill: 'var(--text)' }}>{c[i]}</text>
+                <text x={bw / 2} y={H - 14} textAnchor="middle">≥{t.toFixed(2)}</text>
+              </g>
+            );
+          })}
+        </svg>
+      </div>
+    </>
+  );
+}
+
 const GAPS = [
   ['Validity', 'The agent under test is a rule-following toy, not an LLM. The numbers describe three switches and a seeded noise model, so they cannot support claims about real agents.'],
   ['Effects fixed by construction', 'truncated_plan and tool_misuse counts follow from task structure, and the verifier gap follows from the two invented constants. The what-if sliders above make this visible.'],
-  ['Uncertainty', `The repo reports only population variance over ${SUITE.masterSeeds.length} seeds, rounded to 4 places (many cells read 0.0). No intervals over tasks and no paired tests. This page adds a bootstrap over tasks, labelled as added.`],
+  ['Uncertainty', `The repo reports only population variance over ${SUITE.masterSeeds.length} seeds, rounded to 4 places (many cells read 0.0). No intervals over tasks and no paired tests. This page adds a bootstrap over tasks and a paired bootstrap against the full variant, labelled as added.`],
   ['pass@k estimator', 'The repo uses “any of the first k attempts”, not the unbiased estimator of Chen et al. (2021). Both are shown side by side above.'],
-  ['Held-out independence', 'Same author, same repo, one reused template (the near-neighbour pair). Hygiene proves no exact leakage only.'],
+  ['Held-out independence', 'Same author, same repo, one reused template (the near-neighbour pair). Hygiene proves no exact leakage only. The near-duplicate threshold was a single fixed value; a threshold sweep is now committed and shown above.'],
   ['Taxonomy', `${ZERO_CLASSES} of ${TAXONOMY.length} classes (loop_trap, excess_steps) are unreachable by construction; tool_misuse has one mechanism; no human adjudication sample or agreement rate.`],
   ['Related work', 'NOVELTY.md is a draft with no measurement and SPEC.md has no citations. Real-agent benchmarks such as SWE-bench (Jimenez et al., 2024), AgentBench (Liu et al., 2024), τ-bench (Yao et al., 2024) and Terminal-Bench (2025) are the comparison class; no measured difference against them is claimed.'],
   ['Cost and environment', 'Cost is abstract units on an invented price list. Runs used the Muse VM, not the assigned fleet node (self-deducted).'],

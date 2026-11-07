@@ -3,7 +3,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import fs from 'node:fs';
-import { sha512, pyRandom, parseSuite, runVariant, summarize, taxonomy, unbiasedFromSeedRows, bootstrapTasks, round4, fingerprintTokens, jaccard, handChecks } from './engine.js';
+import { sha512, pyRandom, parseSuite, runVariant, summarize, taxonomy, unbiasedFromSeedRows, bootstrapTasks, round4, pairedBootstrapDiff, fingerprintTokens, jaccard, handChecks } from './engine.js';
 import { parseGrade, parseSha, parseBacklog } from './docs.js';
 
 const root = new URL('../../', import.meta.url);
@@ -49,6 +49,14 @@ for (const [name, cfg] of Object.entries(suite.variants)) {
 for (const row of build.ablation_table) {
   const a = build.variants[row.variant].all;
   assert.equal(row.mean_success, a.mean_attempt_success_rate); assert.equal(row.pass_at_1, a.pass_at_k['1']);
+}
+
+// Paired bootstrap vs full: the point estimate is the recorded difference in mean success.
+for (const name of Object.keys(suite.variants)) for (const split of ['dev', 'heldout', 'all']) {
+  const rows = (n) => summarize(suite, byVariant[n], ids[split]).seedRows;
+  const p = pairedBootstrapDiff(rows('full'), rows(name));
+  assert.ok(Math.abs(p.point - (build.variants.full[split].mean_attempt_success_rate - build.variants[name][split].mean_attempt_success_rate)) < 1e-4, `paired ${name}/${split}`);
+  assert.ok(p.lo <= p.point + 1e-12 && p.point <= p.hi + 1e-12);
 }
 
 // 5. Deep taxonomy recount.
