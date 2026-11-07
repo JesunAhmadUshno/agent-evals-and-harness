@@ -295,3 +295,15 @@ export function handChecks(suite, tasks) {
     recall: recall.map((t) => t.id), memOnlyOff, toolMisuse: recall.length * memOnlyOff.length * perTaskPerVariant,
   };
 }
+
+// Paired percentile bootstrap over tasks of the difference in mean attempt success (A minus B).
+export function pairedBootstrapDiff(rowsA, rowsB, B = BOOT_B, seed = 2026) {
+  const per = (rows) => rows[0].matrix.map((_, t) => rows.reduce((s, sr) => s + sr.matrix[t].filter(Boolean).length / sr.matrix[t].length, 0) / rows.length);
+  const a = per(rowsA), b = per(rowsB), d = a.map((x, i) => x - b[i]), n = d.length;
+  let st = seed >>> 0;
+  const rnd = () => { st = (st + 0x6d2b79f5) >>> 0; let x = st; x = Math.imul(x ^ (x >>> 15), x | 1); x ^= x + Math.imul(x ^ (x >>> 7), x | 61); return ((x ^ (x >>> 14)) >>> 0) / 4294967296; };
+  const stats = [];
+  for (let k = 0; k < B; k++) { let s = 0; for (let i = 0; i < n; i++) s += d[Math.floor(rnd() * n)]; stats.push(s / n); }
+  stats.sort((x, y) => x - y);
+  return { point: d.reduce((s, x) => s + x, 0) / n, lo: stats[Math.floor(0.025 * B)], hi: stats[Math.ceil(0.975 * B) - 1], tasksDiffering: d.filter((x) => x !== 0).length };
+}
