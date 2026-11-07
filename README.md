@@ -2,6 +2,8 @@
 
 Agent evaluation as its own project: trajectory evals, a private held-out task set, harness against model ablation, contamination hygiene.
 
+Live dashboard: https://jesunahmadushno.github.io/agent-evals-and-harness/ (re-runs the Build harness in your browser and checks it against the committed results; built from `site/`, research review in [docs/research-review.md](docs/research-review.md)).
+
 Status: Learn DONE (2026-11-05). Build DONE (2026-11-05). Deep DONE, compressed (2026-11-05). Release v1.0. The rest of the v2 Deep scope is the v1.1 backlog in ROADMAP.md.
 Project: P27. Fleet node: BlackBoxV2. Wave: Wave 6 (Learn pulled early, Sprint 3 pull, 2026-11-05).
 
