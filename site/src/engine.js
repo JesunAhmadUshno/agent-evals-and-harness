@@ -262,7 +262,8 @@ export const unbiasedPassK = (n, c, k) => (n - c < k ? 1 : 1 - comb(n - c, k) / 
 export const unbiasedFromSeedRows = (seedRows, k) => seedRows.reduce((s, sr) => s + sr.matrix.reduce((t, row) => t + unbiasedPassK(row.length, row.filter(Boolean).length, k), 0) / sr.matrix.length, 0) / seedRows.length;
 
 // Percentile bootstrap over tasks of the mean attempt success rate, seeded mulberry32.
-export function bootstrapTasks(seedRows, B = 2000, seed = 2026) {
+export const BOOT_B = 2000;
+export function bootstrapTasks(seedRows, B = BOOT_B, seed = 2026) {
   const nTasks = seedRows[0].matrix.length;
   const perTask = Array.from({ length: nTasks }, (_, t) => seedRows.reduce((s, sr) => s + sr.matrix[t].filter(Boolean).length / sr.matrix[t].length, 0) / seedRows.length);
   let st = seed >>> 0;
