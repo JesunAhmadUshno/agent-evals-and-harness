@@ -506,7 +506,7 @@ function Taxonomy({ live, isDefault }) {
           <h2>{fmt(t.failed_attempts)} failures, one class each, and most are built in.</h2>
           <p className="sub">
             Every failed attempt gets exactly one primary class, applied in a fixed order. The counts are from results_deep.json; the badge confirms the in-browser classifier, run over the replayed attempt stream, gets the same numbers.
-            {ZERO_CLASSES} classes cannot occur in this toy by construction, so their zero counts say nothing about real agents.
+            {" "}{ZERO_CLASSES} classes cannot occur in this toy by construction, so their zero counts say nothing about real agents.
           </p>
         </div>
         <Match ok={TAX_MATCH} what="results_deep.json" />
