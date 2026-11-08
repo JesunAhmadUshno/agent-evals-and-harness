@@ -19,7 +19,6 @@ https://github.com/JesunAhmadUshno/agent-evals-and-harness/releases
   tasks, success rate 0.75, 12 of 12 outcomes matched the
   expected answer or failure label, 18 total steps at mean 1.5,
   27 total cost units at mean 2.25, and 18 trajectory entries.
-- Level grade: 8,700 of 10,000.
 - Release: https://github.com/JesunAhmadUshno/agent-evals-and-harness/releases/tag/v0.1
 
 ## v0.5, Build (2026-11-05)
@@ -36,7 +35,6 @@ https://github.com/JesunAhmadUshno/agent-evals-and-harness/releases
   no_planner mean 0.4411, no_memory mean 0.8744, no_verifier
   mean 0.8678, minimal mean 0.4089. Full variant split: dev mean
   0.9775, held-out mean 0.982.
-- Level grade: 8,200 of 10,000.
 - Release: https://github.com/JesunAhmadUshno/agent-evals-and-harness/releases/tag/v0.5
 
 ## v1.0, Learn, Build, and compressed Deep (2026-11-05)
@@ -55,7 +53,6 @@ https://github.com/JesunAhmadUshno/agent-evals-and-harness/releases
   0 exact overlaps, 0 duplicates, 0 held-out answers in the toy
   agent code, behavioural mutation check 20 of 20, and one near
   neighbour pair (D16 and H20, Jaccard 0.8) disclosed.
-- Level grade: 7,750 of 10,000 (compressed Deep).
 - Release: https://github.com/JesunAhmadUshno/agent-evals-and-harness/releases/tag/v1.0
 
 ## Held channels

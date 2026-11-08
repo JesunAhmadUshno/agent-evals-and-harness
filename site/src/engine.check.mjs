@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import { sha512, pyRandom, parseSuite, runVariant, summarize, taxonomy, unbiasedFromSeedRows, bootstrapTasks, round4, pairedBootstrapDiff, fingerprintTokens, jaccard, handChecks } from './engine.js';
-import { parseGrade, parseSha, parseBacklog } from './docs.js';
+import { section, parseSha, parseBacklog, parseVerdict, parseStages } from './docs.js';
 
 const root = new URL('../../', import.meta.url);
 const read = (p) => fs.readFileSync(new URL(p, root), 'utf8');
@@ -66,10 +66,11 @@ assert.deepEqual(tax.counts, t.taxonomy_counts);
 assert.deepEqual(tax.byVariant, t.taxonomy_by_variant);
 assert.deepEqual(tax.bySet, t.taxonomy_by_set);
 
-// 6. Determinism sha256 values quoted in the level READMEs match the committed files.
-for (const [readme, file] of [['level-1-learn/README.md', 'level-1-learn/results_learn.json'], ['level-2-build/README.md', 'level-2-build/results_build.json'], ['level-3-deep/README.md', 'level-3-deep/results_deep.json']]) {
+// 6. Determinism sha256 values quoted in each REPORT.md run section match the committed files.
+const report = read('REPORT.md');
+for (const [heading, file] of [['Baseline: Learn', 'level-1-learn/results_learn.json'], ['Build:', 'level-2-build/results_build.json'], ['Deep:', 'level-3-deep/results_deep.json']]) {
   const h = createHash('sha256').update(fs.readFileSync(new URL(file, root))).digest('hex');
-  assert.ok(read(readme).replace(/\s+/g, ' ').includes(h), `${file} sha256 not quoted in ${readme}`);
+  assert.equal(parseSha(section(report, heading)), h, `${file} sha256 not quoted in REPORT.md "${heading}"`);
 }
 // 7. README hand checks and the disclosed D16/H20 near neighbour, recomputed.
 const hc = handChecks(suite, all);
@@ -80,10 +81,9 @@ const [pd, ph] = deep.hygiene.max_cross_set_pair;
 assert.equal(jaccard(fingerprintTokens(all.find((x) => x.id === pd)), fingerprintTokens(all.find((x) => x.id === ph))), deep.hygiene.max_cross_set_jaccard);
 assert.equal(dev.length * held.length, deep.hygiene.cross_set_pairs_compared);
 
-// 8. Grades parsed from the level READMEs are internally consistent (deductions sum to the gap).
-const grades = ['level-1-learn', 'level-2-build', 'level-3-deep'].map((l) => parseGrade(read(`${l}/README.md`)));
-for (const g of grades) assert.equal(g.deductions.reduce((s, d) => s + d.minus, 0), g.of - g.grade);
-assert.deepEqual(grades.map((g) => g.grade), [8700, 8200, 7750]);
-assert.equal(parseSha(read('level-2-build/README.md')), createHash('sha256').update(fs.readFileSync(new URL('level-2-build/results_build.json', root))).digest('hex'));
-assert.ok(parseBacklog(read('ROADMAP.md')).length >= 5);
+// 8. The README abstract and lifecycle parse, and the backlog is present in REPORT.md.
+const readme = read('README.md');
+assert.ok(parseVerdict(readme).length > 0);
+assert.deepEqual(parseStages(readme).map((s) => s[0]), ['Question', 'Proposal', 'Baseline', 'Build', 'Evaluate', 'Report', 'Review', 'Release']);
+assert.ok(parseBacklog(report).length >= 5);
 console.log('engine ok', { cells, attempts: tax.total, failures: tax.failed, taxonomy: tax.counts });

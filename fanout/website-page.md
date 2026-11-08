@@ -23,8 +23,7 @@ deterministic agent, NOT an LLM. Held-out in this project means
 unseen during development in this repo, NOT an external benchmark.
 
 Status: v1.0, 2026-11-05. Learn, Build, and compressed Deep are
-done. Grades on the house 10,000 scale: Learn 8,700, Build 8,200,
-Deep 7,750. Total tests: 64 unit tests, plus the scaffold smoke
+done. Total tests: 64 unit tests, plus the scaffold smoke
 test, all passing at v1.0.
 
 ## Results
