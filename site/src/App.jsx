@@ -6,15 +6,13 @@ import heldTasks from '../../level-2-build/tasks_heldout.json';
 import deep from '../../level-3-deep/results_deep.json';
 import sens from '../../level-3-deep/results_hygiene_sensitivity.json';
 import learn from '../../level-1-learn/results_learn.json';
-import learnMd from '../../level-1-learn/README.md?raw';
-import buildMd from '../../level-2-build/README.md?raw';
-import deepMd from '../../level-3-deep/README.md?raw';
-import roadmapMd from '../../ROADMAP.md?raw';
+import readmeMd from '../../README.md?raw';
+import reportMd from '../../REPORT.md?raw';
 import {
   parseSuite, runVariant, runAgent, summarize, taxonomy, draws, seedString, scoreAttempt, classifyFailure,
   unbiasedFromSeedRows, bootstrapTasks, pairedBootstrapDiff, BOOT_B, OFF_RECORD, TAXONOMY, fingerprintTokens, jaccard, handChecks,
 } from './engine.js';
-import { parseGrade, parseSha, parseBacklog } from './docs.js';
+import { section, parseSha, parseBacklog, parseVerdict, parseStages } from './docs.js';
 
 const REPO = 'https://github.com/JesunAhmadUshno/agent-evals-and-harness';
 const blob = (p) => `${REPO}/blob/main/${p}`;
@@ -40,8 +38,10 @@ const BASE_TAX = taxonomy(Object.fromEntries(REPO_NAMES.map((n) => [n, BASE[n]])
 const TAX_MATCH = same(BASE_TAX.counts, deep.taxonomy.taxonomy_counts) && same(BASE_TAX.byVariant, deep.taxonomy.taxonomy_by_variant) && same(BASE_TAX.bySet, deep.taxonomy.taxonomy_by_set);
 const ab = Object.fromEntries(build.ablation_table.map((r) => [r.variant, r]));
 const nameOf = (cfg) => Object.keys(COMBOS).find((n) => ['planner', 'memory', 'verifier'].every((k) => COMBOS[n][k] === cfg[k]));
-const GRADES = [['Learn', learnMd, 'level-1-learn/README.md'], ['Build', buildMd, 'level-2-build/README.md'], ['Deep', deepMd, 'level-3-deep/README.md']].map(([l, md, p]) => ({ level: l, path: p, sha: parseSha(md), ...parseGrade(md) }));
-const BACKLOG = parseBacklog(roadmapMd);
+const RUNS = [['Learn', 'level-1-learn/run_learn.py', 'Baseline: Learn'], ['Build', 'level-2-build/run_build.py', 'Build:'], ['Deep', 'level-3-deep/run_deep.py', 'Deep:']].map(([level, run, heading]) => ({ level, run, sha: parseSha(section(reportMd, heading)) }));
+const VERDICT = parseVerdict(readmeMd);
+const STAGES = parseStages(readmeMd);
+const BACKLOG = parseBacklog(reportMd);
 const CLASS_COLORS = { truncated_plan: 'var(--primary)', silent_wrong_answer: 'var(--warn)', tool_misuse: 'var(--bad)', loop_trap: '#8a7fd1', excess_steps: '#3aa6a0', other_wrong_answer: 'var(--muted)' };
 
 const SECTIONS = [['top', 'Overview', '◎'], ['learn', 'Learn', '▤'], ['lab', 'Ablation lab', '⚗'], ['ablation', 'Ablation table', '▥'], ['passk', 'pass@k', 'k'], ['deep', 'Taxonomy', '◔'], ['explorer', 'Attempt explorer', '⌕'], ['hygiene', 'Hygiene', '✓'], ['limits', 'Limits', '!'], ['reproduce', 'Reproduce', '❯_']];
@@ -63,10 +63,9 @@ function MenuBar() {
     <div className="menubar" role="banner">
       <span className="apple" aria-hidden="true">◆</span>
       <a className="app" href="#top">Agent Evals Harness</a>
-      <a className="m" href={blob('level-1-learn/README.md')}>Learn</a>
-      <a className="m" href={blob('level-2-build/README.md')}>Build</a>
-      <a className="m" href={blob('level-3-deep/README.md')}>Deep</a>
-      <a className="m" href={blob('docs/research-review.md')}>Review</a>
+      <a className="m" href={blob('README.md')}>Abstract</a>
+      <a className="m" href={blob('PROPOSAL.md')}>Proposal</a>
+      <a className="m" href={blob('REPORT.md')}>Report</a>
       <span className="spacer" />
       <span className="status"><i /> {CELL_MATCH.every(Boolean) ? 'Replay matches record' : 'Replay mismatch'}</span>
       <a href={REPO}>GitHub ↗</a>
@@ -147,7 +146,7 @@ export default function App() {
       <Reproduce />
       <Dock />
       <footer>
-        Every number on this page is read at build time from <code>level-*/results_*.json</code>, the task files, <code>eval_suite.py</code> and the level READMEs, or computed live in your browser by a JavaScript port of the harness that <code>npm run build</code> checks against those files. Code: Apache-2.0.
+        Every number on this page is read at build time from <code>level-*/results_*.json</code>, the task files, <code>eval_suite.py</code>, README.md and REPORT.md, or computed live in your browser by a JavaScript port of the harness that <code>npm run build</code> checks against those files. Code: Apache-2.0.
       </footer>
     </div>
   );
@@ -173,7 +172,7 @@ function Hero() {
       </div>
       <div className="actions">
         <a className="btn primary" href="#lab">Open the ablation lab</a>
-        <a className="btn ghost" href={blob('docs/research-review.md')}>Read the research review</a>
+        <a className="btn ghost" href={blob('REPORT.md')}>Read the report</a>
         <span className="hint">Reproduce with <code>python level-2-build/run_build.py</code></span>
       </div>
       <div className="tiles five">
@@ -664,23 +663,20 @@ const GAPS = [
   ['pass@k estimator', 'The repo uses “any of the first k attempts”, not the unbiased estimator of Chen et al. (2021). Both are shown side by side above.'],
   ['Held-out independence', 'Same author, same repo, one reused template (the near-neighbour pair). Hygiene proves no exact leakage only. The near-duplicate threshold was a single fixed value; a threshold sweep is now committed and shown above.'],
   ['Taxonomy', `${ZERO_CLASSES} of ${TAXONOMY.length} classes (loop_trap, excess_steps) are unreachable by construction; tool_misuse has one mechanism; no human adjudication sample or agreement rate.`],
-  ['Related work', 'NOVELTY.md is a draft with no measurement and SPEC.md has no citations. Real-agent benchmarks such as SWE-bench (Jimenez et al., 2024), AgentBench (Liu et al., 2024), τ-bench (Yao et al., 2024) and Terminal-Bench (2025) are the comparison class; no measured difference against them is claimed.'],
-  ['Cost and environment', 'Cost is abstract units on an invented price list. Runs used the Muse VM, not the assigned fleet node (self-deducted).'],
+  ['Related work', 'The proposed novelty in PROPOSAL.md is a draft with no measurement and the original scope has no citations. Real-agent benchmarks such as SWE-bench (Jimenez et al., 2024), AgentBench (Liu et al., 2024), τ-bench (Yao et al., 2024) and Terminal-Bench (2025) are the comparison class; no measured difference against them is claimed.'],
+  ['Cost and environment', 'Cost is abstract units on an invented price list. Runs used the Muse VM, not the assigned fleet node.'],
 ];
 
 function Limits() {
   return (
-    <section id="limits" className="card window reveal" data-title="ROADMAP.md — limits and grades">
+    <section id="limits" className="card window reveal" data-title="README.md — verdict and lifecycle">
       <p className="eyebrow">Threats to validity</p>
       <h2>What this evidence can and cannot carry.</h2>
-      <p className="sub">The grades are <b>self-assigned in the repo’s level READMEs</b>, not an external evaluation. Deductions are quoted from those files; the review gaps are from this site’s <a href={blob('docs/research-review.md')}>research review</a>.</p>
-      <div className="tiles" style={{ gridTemplateColumns: 'repeat(3, minmax(0, 1fr))' }}>
-        {GRADES.map((g) => (
-          <div className="tile" key={g.level}>
-            <div className="num">{fmt(g.grade)}</div><div className="cap">{g.level}, of {fmt(g.of)} · self-graded in the repo</div>
-            <details><summary>{g.deductions.length} deductions, minus {fmt(g.of - g.grade)}</summary>
-              <ul className="deds">{g.deductions.map((d) => <li key={d.text}>{d.text} <b>−{fmt(d.minus)}</b></li>)}</ul>
-            </details>
+      <p className="sub">Verdict, read from README.md: <b>{VERDICT}</b>. {STAGES.filter(([, st]) => st === 'DONE').length} of {STAGES.length} lifecycle stages done; the review gaps and backlog are from <a href={blob('REPORT.md')}>REPORT.md</a>.</p>
+      <div className="tiles" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))' }}>
+        {STAGES.map(([name, st, date]) => (
+          <div className="tile" key={name}>
+            <div className="cap">{name}</div><span className={`pill ${st === 'DONE' ? 'good' : 'warn'}`}>{st}{date ? ` ${date}` : ''}</span>
           </div>
         ))}
       </div>
@@ -690,7 +686,7 @@ function Limits() {
           <ul className="gaps">{GAPS.map(([k, v]) => <li key={k}><b>{k}.</b> {v}</li>)}</ul>
         </div>
         <div>
-          <h3>v1.1 backlog (from ROADMAP.md, not done)</h3>
+          <h3>v1.1 backlog (from REPORT.md, not done)</h3>
           <ul className="gaps">{BACKLOG.map((b) => <li key={b.title}><b>{b.title}.</b> {b.body}</li>)}</ul>
         </div>
       </div>
@@ -700,19 +696,19 @@ function Limits() {
 
 function Reproduce() {
   const docs = [
-    ['SPEC.md', 'Spec', 'Scope and acceptance'], ['level-2-build/eval_suite.py', 'eval_suite.py', 'Harness, agent, pass@k'], ['level-3-deep/deep_analysis.py', 'deep_analysis.py', 'Taxonomy and hygiene'],
-    ['site/src/engine.js', 'engine.js', 'The JavaScript port'], ['site/src/engine.check.mjs', 'engine.check.mjs', 'Known-answer check'], ['docs/research-review.md', 'Research review', 'Rubric grades and fixes'],
+    ['PROPOSAL.md', 'Proposal', 'Scope, specs, draft re-run'], ['level-2-build/eval_suite.py', 'eval_suite.py', 'Harness, agent, pass@k'], ['level-3-deep/deep_analysis.py', 'deep_analysis.py', 'Taxonomy and hygiene'],
+    ['site/src/engine.js', 'engine.js', 'The JavaScript port'], ['site/src/engine.check.mjs', 'engine.check.mjs', 'Known-answer check'], ['REPORT.md', 'Report', 'Results, review and limits'],
   ];
   return (
     <section id="reproduce" className="card window reveal" data-title="Terminal — python level-N/run_*.py">
       <p className="eyebrow">Reproduce it</p>
       <h2>Three runners, deterministic to the byte.</h2>
       <ol className="steps" style={{ marginTop: 16 }}>
-        {GRADES.map((g, i) => (
-          <li key={g.level}><span className="n">{i + 1}</span><div><b>{g.level}</b><div className="hint"><code>python {g.path.replace('README.md', ['run_learn.py', 'run_build.py', 'run_deep.py'][i])}</code></div>
-            <div className="hint">Recorded output sha256, from {g.path}: <span className="mono hash">{g.sha}</span></div></div></li>
+        {RUNS.map((g, i) => (
+          <li key={g.level}><span className="n">{i + 1}</span><div><b>{g.level}</b><div className="hint"><code>python {g.run}</code></div>
+            <div className="hint">Recorded output sha256, from REPORT.md: <span className="mono hash">{g.sha}</span></div></div></li>
         ))}
-        <li><span className="n">4</span><div><b>Unit tests</b><div className="hint"><code>python tests/test_smoke.py && python -m unittest discover -s tests -v</code></div></div></li>
+        <li><span className="n">4</span><div><b>Unit tests</b><div className="hint"><code>python -m unittest discover -s tests -p &quot;test_*.py&quot; -v</code></div></div></li>
         <li><span className="n">5</span><div><b>Second-language replay</b><div className="hint"><code>cd site && npm ci && npm run build</code></div><div className="hint">Runs engine.check.mjs first: the build fails if the JavaScript port disagrees with any recorded number.</div></div></li>
       </ol>
       <div className="docs" style={{ marginTop: 20 }}>

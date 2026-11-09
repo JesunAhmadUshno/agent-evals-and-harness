@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite it as below."
+title: "agent-evals-and-harness: an agent evaluation harness with trajectory logs, a held-out set, pass@k, component ablations, a failure taxonomy and contamination hygiene, demonstrated on a toy agent"
+authors:
+  - family-names: Ushno
+    given-names: Jesun Ahmad
+repository-code: "https://github.com/JesunAhmadUshno/agent-evals-and-harness"
+url: "https://jesunahmadushno.github.io/agent-evals-and-harness/"
+license: Apache-2.0
+date-released: 2026-11-05

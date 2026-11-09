@@ -1,17 +1,18 @@
-// Parses the self-assigned grades, deductions, determinism hashes and backlog out of the repo's
-// own markdown at build time, so none of these numbers are retyped on the page.
+// Parses the verdict, lifecycle, determinism hashes and backlog out of the repo's own
+// markdown at build time, so none of these values are retyped on the page.
 const flat = (s) => s.replace(/\s+/g, ' ');
-export function parseGrade(md) {
-  const [, got, of] = md.match(/Grade: ([\d,]+) of ([\d,]+)/);
-  const block = md.split(/Deductions[^\n]*\n/)[1].split(/\n\s*\n/)[0];
-  const deductions = block.split(/\n- /).map((s) => flat(s.replace(/^- /, '')).trim()).filter(Boolean).map((s) => {
-    const m = s.match(/^(.*):\s*minus ([\d,]+)\.?$/);
-    return { text: m[1], minus: Number(m[2].replace(/,/g, '')) };
-  });
-  return { grade: Number(got.replace(/,/g, '')), of: Number(of.replace(/,/g, '')), deductions };
+// The text of one "## " section whose heading starts with `heading`, up to the next "## ".
+export function section(md, heading) {
+  const start = md.indexOf(`\n## ${heading}`);
+  if (start < 0) throw new Error(`section not found: ${heading}`);
+  const rest = md.slice(start + 1);
+  const end = rest.indexOf('\n## ', 3);
+  return end < 0 ? rest : rest.slice(0, end);
 }
 export const parseSha = (md) => flat(md).match(/sha256 ([0-9a-f]{64}) on both runs/)[1];
+export const parseVerdict = (md) => md.match(/^\*\*Verdict\.\*\* ([^.]+)/m)[1];
+export const parseStages = (md) => [...md.matchAll(/^- (\w+): ([A-Z]+)(?: (\d{4}-\d{2}-\d{2}))?$/gm)].map((m) => m.slice(1));
 export function parseBacklog(md) {
-  const sec = md.split('## v1.1 backlog')[1];
+  const sec = md.split('## v1.1 backlog')[1].split(/\n## /)[0];
   return sec.split(/\n- /).slice(1).map((s) => { const t = flat(s).trim(); const i = t.indexOf(':'); return { title: t.slice(0, i), body: t.slice(i + 1).trim() }; });
 }

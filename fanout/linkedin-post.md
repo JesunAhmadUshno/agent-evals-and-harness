@@ -43,9 +43,6 @@ construction because this toy cannot loop. 64 tests in total.
 The rest of the Deep scope is the v1.1 backlog in the repo, not
 claimed as done.
 
-Grades, house scale: Learn 8,700, Build 8,200, Deep 7,750 of
-10,000.
-
 If you evaluate agents: which failure class costs you the most
 time, truncated plans, silent wrong answers, or tool misuse?
 

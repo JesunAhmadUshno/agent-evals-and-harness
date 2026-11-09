@@ -49,8 +49,7 @@ eval suite with a dev set and a held-out set reported separately,
 pass at k over seeded repeated trials, and five toy component
 ablation variants. Compressed Deep classified every failed attempt
 from real runs of the Build suite into a six-class taxonomy and
-computed a contamination hygiene report in code. Grades on the
-house 10,000 scale: Learn 8,700, Build 8,200, Deep 7,750.
+computed a contamination hygiene report in code.
 
 Future: the rest of the v2 Deep scope is named in ROADMAP.md in
 the repo as the v1.1 backlog. It includes a real LLM-backed agent
@@ -88,8 +87,6 @@ every task.
 | Trajectory entries | 18 |
 | Tests | 21, plus the scaffold smoke test |
 
-Grade: 8,700 of 10,000.
-
 ### Level 2, Build (release v0.5)
 
 The Build suite runs five configurable toy agent variants over
@@ -113,7 +110,7 @@ largest loss, because multi-step tasks stop at step 1. Removing
 the verifier drops pass@1 to 0.85, while pass@3 and pass@5 mostly
 recover, because a later attempt may not slip.
 
-Grade: 8,200 of 10,000. Tests at this level: 24 new tests, 45 unit
+Tests at this level: 24 new tests, 45 unit
 tests in total with Learn.
 
 ### Level 3, Deep, compressed (release v1.0)
@@ -143,7 +140,7 @@ disclosed, not hidden: D16 and H20 at Jaccard 0.8, below the 0.9
 near-duplicate threshold. The behavioural mutation check held at
 20 of 20 runs unchanged.
 
-Grade: 7,750 of 10,000. Tests at this level: 19 new tests, 64 unit
+Tests at this level: 19 new tests, 64 unit
 tests in total, plus the scaffold smoke test.
 
 ## Honest limits
@@ -169,7 +166,7 @@ tests in total, plus the scaffold smoke test.
 - Attempts are reruns. The 4,500 Deep attempts are seeded reruns
   of the same 36 tasks, not 4,500 distinct tasks.
 - All levels ran on the Muse VM, not the assigned fleet node
-  BlackBoxV2. That deduction is named in each level grade.
+  BlackBoxV2. That limit is named in each level write-up.
 
 ## Why this matters for real eval work
 
