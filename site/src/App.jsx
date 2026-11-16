@@ -131,7 +131,7 @@ export default function App() {
   const isDefault = consts.slipPerDifficulty === DEFAULT_CONSTS.slipPerDifficulty && consts.catchProb === DEFAULT_CONSTS.catchProb;
   const live = useMemo(() => (isDefault ? BASE : runAll(consts)), [consts, isDefault]);
   return (
-    <div className="wrap">
+    <div className="wrap"><a className="skip" href="#top">Skip to content</a>
       <MenuBar />
       <div className="glow" aria-hidden="true" />
       <Hero />
@@ -147,7 +147,7 @@ export default function App() {
       <Dock />
       <footer>
         Every number on this page is read at build time from <code>level-*/results_*.json</code>, the task files, <code>eval_suite.py</code>, README.md and REPORT.md, or computed live in your browser by a JavaScript port of the harness that <code>npm run build</code> checks against those files. Code: Apache-2.0.
-      </footer>
+      <nav className="support" aria-label="Support this work"><a href="https://github.com/sponsors/JesunAhmadUshno">Sponsor this work</a><a href="https://github.com/sponsors/JesunAhmadUshno">Donate</a><a href="https://buymeacoffee.com/jesun">Buy Me a Coffee</a><a href="https://calendly.com/jesunahmadushno/30min">Work with me</a></nav></footer>
     </div>
   );
 }
@@ -155,7 +155,7 @@ export default function App() {
 function Hero() {
   const t = deep.taxonomy, full = ab.full, np = ab.no_planner;
   return (
-    <header className="card hero window" id="top" data-title="harness.app — README">
+    <header className="card hero window" id="top" data-title="harness.app - README">
       <div className="head">
         <p className="eyebrow">Toy agent eval harness · replayed live</p>
         <span className={`pill ${CELL_MATCH.every(Boolean) ? 'good' : 'bad'}`}>● Live replay: {CELL_MATCH.filter(Boolean).length}/{CELL_MATCH.length} result cells match</span>
@@ -193,7 +193,7 @@ function Learn() {
   const metrics = [['success_rate', 'Success rate', 1], ['mean_steps', 'Mean steps', Math.max(...cats.map(([, c]) => c.mean_steps))], ['mean_cost_units', 'Mean cost units', Math.max(...cats.map(([, c]) => c.mean_cost_units))]];
   const s = learn.summary;
   return (
-    <section id="learn" className="card window reveal" data-title="run_learn.py — recorded trajectories">
+    <section id="learn" className="card window reveal" data-title="run_learn.py - recorded trajectories">
       <div className="head">
         <div>
           <p className="eyebrow">Level 1 · Learn</p>
@@ -257,7 +257,7 @@ function Trajectory({ rows }) {
           {rows.map((r) => (
             <tr key={r.step}><td>{r.step}</td><td className="mono">{r.tool}</td><td className="mono">{JSON.stringify(r.args)}</td>
               <td>{r.error ? <span className="no">{r.error}</span> : <span className="mono">{show(r.result)}</span>}</td>
-              <td className="mono">{r.failure_label ?? '—'}</td><td>{r.cost_units}</td></tr>
+              <td className="mono">{r.failure_label ?? '-'}</td><td>{r.cost_units}</td></tr>
           ))}
         </tbody>
       </table>
@@ -279,7 +279,7 @@ function Lab({ consts, setConsts, isDefault, live }) {
   const bars = Object.keys(COMBOS).map((n) => ({ n, v: summarize(SUITE, live[n], IDS[split]).mean_attempt_success_rate, rec: REPO_NAMES.includes(n) ? build.variants[n][split].mean_attempt_success_rate : null }));
   const W = 960, rowH = 30, l = 150, H = bars.length * rowH + 26, x = (val) => l + val * (W - l - 70);
   return (
-    <section id="lab" className="card window reveal" data-title="eval_suite.py — live ablation lab">
+    <section id="lab" className="card window reveal" data-title="eval_suite.py - live ablation lab">
       <div className="head">
         <div>
           <p className="eyebrow">Level 2 · Build · live in your browser</p>
@@ -344,7 +344,7 @@ function Ablation() {
   const seedLive = Object.fromEntries(REPO_NAMES.map((n) => [n, summarize(SUITE, BASE[n], IDS.all).seedRows]));
   const total = IDS.all.length * SUITE.attempts;
   return (
-    <section id="ablation" className="card window reveal" data-title="results_build.json — ablation table">
+    <section id="ablation" className="card window reveal" data-title="results_build.json - ablation table">
       <p className="eyebrow">Recorded results · dev and held-out kept apart</p>
       <h2>Removing the planner costs the most; removing the verifier mostly hurts pass@1.</h2>
       <p className="sub">
@@ -414,7 +414,7 @@ function PassK() {
   const pd = useMemo(() => (name === 'full' ? null : pairedBootstrapDiff(summarize(SUITE, BASE.full, IDS[split]).seedRows, S.seedRows)), [name, split, S]);
   const ks = Array.from({ length: n }, (_, i) => i + 1);
   return (
-    <section id="passk" className="card window reveal" data-title="pass_at_k.calc — live">
+    <section id="passk" className="card window reveal" data-title="pass_at_k.calc - live">
       <div className="head">
         <div>
           <p className="eyebrow">pass@k explained · added estimators labelled</p>
@@ -498,7 +498,7 @@ function Taxonomy({ live, isDefault }) {
   const liveTax = useMemo(() => taxonomy(Object.fromEntries(REPO_NAMES.map((n) => [n, live[n]]))), [live]);
   const svByVariant = REPO_NAMES.map((n) => t.taxonomy_by_variant[n].silent_wrong_answer);
   return (
-    <section id="deep" className="card window reveal" data-title="deep_analysis.py — failure taxonomy">
+    <section id="deep" className="card window reveal" data-title="deep_analysis.py - failure taxonomy">
       <div className="head">
         <div>
           <p className="eyebrow">Level 3 · Deep</p>
@@ -552,7 +552,7 @@ function Explorer({ consts, isDefault }) {
   const run = runAgent(SUITE, cfg, task, d, consts), pass = scoreAttempt(task, run);
   const cls = pass ? null : classifyFailure(cfg, task, run);
   return (
-    <section id="explorer" className="card window reveal" data-title="attempt_explorer — live">
+    <section id="explorer" className="card window reveal" data-title="attempt_explorer - live">
       <div className="head">
         <div>
           <p className="eyebrow">Trace any number to one attempt</p>
@@ -569,8 +569,8 @@ function Explorer({ consts, isDefault }) {
       </div>
       <p className="mono seedline">random.Random("{ss}")</p>
       <div className="tiles" style={{ gridTemplateColumns: 'repeat(3, minmax(0, 1fr))' }}>
-        <div className="tile"><div className="num">{run.drawsUsed ? d[0].toFixed(4) : '—'}</div><div className="cap">{run.drawsUsed ? `slip draw vs ${run.slipRate.toFixed(2)} (${consts.slipPerDifficulty} × difficulty ${task.difficulty}): ${run.slip ? 'slips' : 'no slip'}` : 'no draw: the run failed before answering'}</div></div>
-        <div className="tile"><div className="num">{run.drawsUsed === 2 ? d[1].toFixed(4) : '—'}</div><div className="cap">{run.drawsUsed === 2 ? `catch draw vs ${consts.catchProb}: ${run.slip_caught ? 'caught, answer restored' : 'missed'}` : run.slip ? 'no verifier: the slip goes through' : 'catch draw not used'}</div></div>
+        <div className="tile"><div className="num">{run.drawsUsed ? d[0].toFixed(4) : '-'}</div><div className="cap">{run.drawsUsed ? `slip draw vs ${run.slipRate.toFixed(2)} (${consts.slipPerDifficulty} × difficulty ${task.difficulty}): ${run.slip ? 'slips' : 'no slip'}` : 'no draw: the run failed before answering'}</div></div>
+        <div className="tile"><div className="num">{run.drawsUsed === 2 ? d[1].toFixed(4) : '-'}</div><div className="cap">{run.drawsUsed === 2 ? `catch draw vs ${consts.catchProb}: ${run.slip_caught ? 'caught, answer restored' : 'missed'}` : run.slip ? 'no verifier: the slip goes through' : 'catch draw not used'}</div></div>
         <div className="tile"><div className="num" style={{ color: pass ? 'var(--good)' : 'var(--bad)' }}>{pass ? 'pass' : 'fail'}</div><div className="cap">{pass ? 'scored as passing' : `class: ${cls}`}</div></div>
       </div>
       <p className="hint" style={{ marginTop: 14, marginBottom: 8 }}>
@@ -602,7 +602,7 @@ function Hygiene() {
     ['Dev file sha256 matches the Build record', h.dev_file_sha256.slice(0, 12) + '…', h.dev_hash_matches_build_record],
     ['Shared expected-answer values (informational)', `${h.shared_distinct_expected_answer_values} (${h.shared_expected_answer_values.join(', ')})`, null],
   ];
-  const fields = [['category', (t) => t.category], ['difficulty', (t) => t.difficulty], ['expected outcome', (t) => t.expected_outcome], ['failure label', (t) => t.expected_failure_label], ...A.plan.map((_, i) => [`step ${i + 1}`, (t) => (t.plan[i] ? `${t.plan[i].tool}(${t.plan[i].args.map((x) => JSON.stringify(x)).join(', ')})` : '—')])];
+  const fields = [['category', (t) => t.category], ['difficulty', (t) => t.difficulty], ['expected outcome', (t) => t.expected_outcome], ['failure label', (t) => t.expected_failure_label], ...A.plan.map((_, i) => [`step ${i + 1}`, (t) => (t.plan[i] ? `${t.plan[i].tool}(${t.plan[i].args.map((x) => JSON.stringify(x)).join(', ')})` : '-')])];
   return (
     <section id="hygiene" className="card window reveal" data-title="hygiene_report.txt">
       <p className="eyebrow">Contamination hygiene · results_deep.json</p>
@@ -669,7 +669,7 @@ const GAPS = [
 
 function Limits() {
   return (
-    <section id="limits" className="card window reveal" data-title="README.md — verdict and lifecycle">
+    <section id="limits" className="card window reveal" data-title="README.md - verdict and lifecycle">
       <p className="eyebrow">Threats to validity</p>
       <h2>What this evidence can and cannot carry.</h2>
       <p className="sub">Verdict, read from README.md: <b>{VERDICT}</b>. {STAGES.filter(([, st]) => st === 'DONE').length} of {STAGES.length} lifecycle stages done; the review gaps and backlog are from <a href={blob('REPORT.md')}>REPORT.md</a>.</p>
@@ -700,7 +700,7 @@ function Reproduce() {
     ['site/src/engine.js', 'engine.js', 'The JavaScript port'], ['site/src/engine.check.mjs', 'engine.check.mjs', 'Known-answer check'], ['REPORT.md', 'Report', 'Results, review and limits'],
   ];
   return (
-    <section id="reproduce" className="card window reveal" data-title="Terminal — python level-N/run_*.py">
+    <section id="reproduce" className="card window reveal" data-title="Terminal - python level-N/run_*.py">
       <p className="eyebrow">Reproduce it</p>
       <h2>Three runners, deterministic to the byte.</h2>
       <ol className="steps" style={{ marginTop: 16 }}>
